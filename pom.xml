@@ -136,7 +136,7 @@
 							<execution>
 								<id>jacoco-check</id>
 								<goals>
-									<goal>chek</goal>
+									<goal>check</goal>
 								</goals>
 								<configuration>
 									<rules>
