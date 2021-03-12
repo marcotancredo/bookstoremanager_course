@@ -2,6 +2,8 @@ dist: xenial
 language: java
 sudo: false
 jdk: openjdk8
+before_install:
+  - chmod +x mvnw
 install: true
 cache:
   directories:
