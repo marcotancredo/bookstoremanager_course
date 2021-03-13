@@ -8,7 +8,7 @@ A few sentences describing the overall goals of the pull request's commits.
 - [ ] Tests
 - [ ] Documentation
 
-## Deployu Notes
+## Deploy Notes
 Notes regarding deployment the cotained body of work. These should note any db migrations, tc.
 
 ## Steps to Test or Reproduce

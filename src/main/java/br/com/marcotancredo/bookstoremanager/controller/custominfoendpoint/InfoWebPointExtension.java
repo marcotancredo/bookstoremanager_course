@@ -1,4 +1,4 @@
-package br.com.marcotancredo.bookstoremanager.custominfoendpoint;
+package br.com.marcotancredo.bookstoremanager.controller.custominfoendpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
