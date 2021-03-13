@@ -1,9 +1,9 @@
-package br.com.marcotancredo.bookstoremanager.books.entity;
+package br.com.marcotancredo.bookstoremanager.model.books.entity;
 
-import br.com.marcotancredo.bookstoremanager.author.entity.Author;
 import br.com.marcotancredo.bookstoremanager.entity.Auditable;
-import br.com.marcotancredo.bookstoremanager.publishers.entity.Publisher;
-import br.com.marcotancredo.bookstoremanager.users.entity.User;
+import br.com.marcotancredo.bookstoremanager.model.authors.entity.Author;
+import br.com.marcotancredo.bookstoremanager.model.publishers.entity.Publisher;
+import br.com.marcotancredo.bookstoremanager.model.users.entity.User;
 import lombok.Data;
 
 import javax.persistence.*;

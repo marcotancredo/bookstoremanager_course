@@ -1,4 +1,4 @@
-package br.com.marcotancredo.bookstoremanager.users.enums;
+package br.com.marcotancredo.bookstoremanager.model.users.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
