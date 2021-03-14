@@ -10,7 +10,7 @@ public class AuthorDTOBuilder {
     private Long id = 1L;
 
     @Builder.Default
-    private String name = "Marco Antonio Tancreod";
+    private String name = "Marco Antonio Tancredo";
 
     @Builder.Default
     private int age = 33;
