@@ -20,6 +20,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import static br.com.marcotancredo.bookstoremanager.utils.JsonConversionUtils.asJsonString;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -53,7 +54,7 @@ public class AuthorControllerTest {
         when(authorService.create(expectedCreatedAuthorDTO))
                 .thenReturn(expectedCreatedAuthorDTO);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(AUTHOR_API_URL_PATH)
+        mockMvc.perform(post(AUTHOR_API_URL_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(expectedCreatedAuthorDTO)))
                 .andExpect(status().isCreated())
@@ -67,10 +68,25 @@ public class AuthorControllerTest {
         AuthorDTO expectedCreatedAuthorDTO = authorDTOBuilder.buildAuthorDTO();
         expectedCreatedAuthorDTO.setName(null);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(AUTHOR_API_URL_PATH)
+        mockMvc.perform(post(AUTHOR_API_URL_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(expectedCreatedAuthorDTO)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void whenGETWithValidIdIsCalledTHenStatusOkShouldBeReturned() throws Exception {
+        AuthorDTO expectedFoundAuthorDTO = authorDTOBuilder.buildAuthorDTO();
+
+        when(authorService.findById(expectedFoundAuthorDTO.getId()))
+                .thenReturn(expectedFoundAuthorDTO);
+
+        mockMvc.perform(get(AUTHOR_API_URL_PATH + "/" + expectedFoundAuthorDTO.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(expectedFoundAuthorDTO.getId().intValue())))
+                .andExpect(jsonPath("$.name", is(expectedFoundAuthorDTO.getName())))
+                .andExpect(jsonPath("$.age", is(expectedFoundAuthorDTO.getAge())));
     }
 
 }

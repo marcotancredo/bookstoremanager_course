@@ -4,6 +4,7 @@ import br.com.marcotancredo.bookstoremanager.author.builder.AuthorDTOBuilder;
 import br.com.marcotancredo.bookstoremanager.model.authors.dto.AuthorDTO;
 import br.com.marcotancredo.bookstoremanager.model.authors.entity.Author;
 import br.com.marcotancredo.bookstoremanager.model.authors.exception.AuthorAlreadyExistsException;
+import br.com.marcotancredo.bookstoremanager.model.authors.exception.AuthorNotFoundException;
 import br.com.marcotancredo.bookstoremanager.model.authors.mapper.AuthorMapper;
 import br.com.marcotancredo.bookstoremanager.model.authors.repository.AuthorRepository;
 import br.com.marcotancredo.bookstoremanager.model.authors.service.AuthorService;
@@ -61,11 +62,36 @@ public class AuthorServiceTest {
     void whenExistingAuthorIsInformedThenAnExceptionSouldBeThrown(){
         //given
         AuthorDTO expectedAuthorToCreateDTO = authorDTOBuilder.buildAuthorDTO();
-        Author excpectedCreatedAuthor = authorMapper.toModel(expectedAuthorToCreateDTO);
+        Author expectedCreatedAuthor = authorMapper.toModel(expectedAuthorToCreateDTO);
 
         when(authorRepository.findByName(expectedAuthorToCreateDTO.getName()))
-                .thenReturn(Optional.of(excpectedCreatedAuthor));
+                .thenReturn(Optional.of(expectedCreatedAuthor));
 
         assertThrows(AuthorAlreadyExistsException.class, () -> authorService.create(expectedAuthorToCreateDTO));
+    }
+
+    @Test
+    void whenValidIdIsGivenThenAnAuthorShouldBeReturned(){
+        //given
+        AuthorDTO expectedFoundAuthorDTO = authorDTOBuilder.buildAuthorDTO();
+        Author expectedFoundAuthor = authorMapper.toModel(expectedFoundAuthorDTO);
+
+        when(authorRepository.findById(expectedFoundAuthorDTO.getId()))
+                .thenReturn(Optional.of(expectedFoundAuthor));
+
+        AuthorDTO foundAuthorDTO = authorService.findById(expectedFoundAuthorDTO.getId());
+
+        assertThat(foundAuthorDTO, is(equalTo(expectedFoundAuthorDTO)));
+    }
+
+    @Test
+    void whenInvalidIdIsGivenThenAnExceptionShouldBeReturned(){
+        //given
+        AuthorDTO expectedFoundAuthorDTO = authorDTOBuilder.buildAuthorDTO();
+        Author expectedFoundAuthor = authorMapper.toModel(expectedFoundAuthorDTO);
+
+        when(authorRepository.findById(expectedFoundAuthorDTO.getId())).thenReturn(Optional.empty());
+
+        assertThrows(AuthorNotFoundException.class, () -> authorService.findById(expectedFoundAuthorDTO.getId()));
     }
 }

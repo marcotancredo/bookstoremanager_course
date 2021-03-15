@@ -3,6 +3,7 @@ package br.com.marcotancredo.bookstoremanager.model.authors.service;
 import br.com.marcotancredo.bookstoremanager.model.authors.dto.AuthorDTO;
 import br.com.marcotancredo.bookstoremanager.model.authors.entity.Author;
 import br.com.marcotancredo.bookstoremanager.model.authors.exception.AuthorAlreadyExistsException;
+import br.com.marcotancredo.bookstoremanager.model.authors.exception.AuthorNotFoundException;
 import br.com.marcotancredo.bookstoremanager.model.authors.mapper.AuthorMapper;
 import br.com.marcotancredo.bookstoremanager.model.authors.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,13 @@ public class AuthorService {
         Author authorToCreate = authorMapper.toModel(authorDTO);
         Author createdAuthor = authorRepository.save(authorToCreate);
         return authorMapper.toDTO(createdAuthor);
+    }
+
+    public AuthorDTO findById(Long id){
+        Author foundAuthor = authorRepository.findById(id)
+                .orElseThrow(() -> new AuthorNotFoundException(id));
+
+        return authorMapper.toDTO(foundAuthor);
     }
 
     private void verifyIfExists(String authorName) {
