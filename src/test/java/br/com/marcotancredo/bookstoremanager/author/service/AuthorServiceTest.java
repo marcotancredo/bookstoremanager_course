@@ -8,6 +8,7 @@ import br.com.marcotancredo.bookstoremanager.model.authors.exception.AuthorNotFo
 import br.com.marcotancredo.bookstoremanager.model.authors.mapper.AuthorMapper;
 import br.com.marcotancredo.bookstoremanager.model.authors.repository.AuthorRepository;
 import br.com.marcotancredo.bookstoremanager.model.authors.service.AuthorService;
+import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +24,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthorServiceTest {
@@ -118,5 +119,31 @@ public class AuthorServiceTest {
         List<AuthorDTO> foundAuthorsDTO = authorService.findAll();
 
         assertThat(foundAuthorsDTO.size(), is(0));
+    }
+
+    @Test
+    void whenValidAuthorIdIsGivenThenItShouldBeDeleted() {
+        //given
+        AuthorDTO expectedDeletedAuthorDTO = authorDTOBuilder.buildAuthorDTO();
+        Author expectedDeletedAuthor = authorMapper.toModel(expectedDeletedAuthorDTO);
+
+        Long expectedDeletedAuthorId = expectedDeletedAuthorDTO.getId();
+
+        doNothing().when(authorRepository).deleteById(expectedDeletedAuthorId);
+        when(authorRepository.findById(expectedDeletedAuthorId)).thenReturn(Optional.of(expectedDeletedAuthor));
+
+        authorService.delete(expectedDeletedAuthorId);
+
+        verify(authorRepository, times(1)).deleteById(expectedDeletedAuthorId);
+        verify(authorRepository, times(1)).findById(expectedDeletedAuthorId);
+    }
+
+    @Test
+    void whenInValidAuthorIdIsGivenThenAnExceptionShouldBeThrown() {
+        var expectedInvalidAuthorId = 2L;
+
+        when(authorRepository.findById(expectedInvalidAuthorId)).thenReturn(Optional.empty());
+
+        assertThrows(AuthorNotFoundException.class, () -> authorService.delete((expectedInvalidAuthorId)));
     }
 }
