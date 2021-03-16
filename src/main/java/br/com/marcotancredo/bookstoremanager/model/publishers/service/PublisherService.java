@@ -1,9 +1,14 @@
 package br.com.marcotancredo.bookstoremanager.model.publishers.service;
 
+import br.com.marcotancredo.bookstoremanager.model.publishers.dto.PublisherDTO;
+import br.com.marcotancredo.bookstoremanager.model.publishers.entity.Publisher;
+import br.com.marcotancredo.bookstoremanager.model.publishers.exception.PublisherAlreadyExistsException;
 import br.com.marcotancredo.bookstoremanager.model.publishers.mapper.PublisherMapper;
 import br.com.marcotancredo.bookstoremanager.model.publishers.repository.PublisherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class PublisherService {
@@ -15,5 +20,22 @@ public class PublisherService {
     @Autowired
     public PublisherService(PublisherRepository publisherRepository){
         this.publisherRepository = publisherRepository;
+    }
+
+    public PublisherDTO create(PublisherDTO publisherDTO){
+        verifyIfExists(publisherDTO.getName(), publisherDTO.getCode());
+
+        Publisher publisherToCreate = publisherMapper.toModel(publisherDTO);
+        Publisher createdPublisher = publisherRepository.save(publisherToCreate);
+        return publisherMapper.toDTO(createdPublisher);
+    }
+
+    private void verifyIfExists(String name, String code) {
+        Optional<Publisher> duplicatedPublisher = publisherRepository
+                .findByNameOrCode(name, code);
+
+        if(duplicatedPublisher.isPresent()){
+            throw new PublisherAlreadyExistsException(name, code);
+        }
     }
 }

@@ -23,7 +23,7 @@ public class Publisher extends Auditable {
     private String code;
 
     @Column(nullable = false, columnDefinition = "TIMESTAMP")
-    private LocalDate foundationData;
+    private LocalDate foundationDate;
 
     @OneToMany(mappedBy = "publisher", fetch = FetchType.LAZY)
     private List<Book> books;

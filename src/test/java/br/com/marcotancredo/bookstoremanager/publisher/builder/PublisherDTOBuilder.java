@@ -18,12 +18,12 @@ public class PublisherDTOBuilder {
     private final String code = "T4NCR3D0";
 
     @Builder.Default
-    private final LocalDate foundationData = LocalDate.of(2020, 6, 1);
+    private final LocalDate foundationDate = LocalDate.of(2020, 6, 1);
 
     public PublisherDTO buildPublisherDTO(){
         return new PublisherDTO(id,
                 name,
                 code,
-                foundationData);
+                foundationDate);
     }
 }
