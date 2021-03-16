@@ -3,6 +3,7 @@ package br.com.marcotancredo.bookstoremanager.model.publishers.service;
 import br.com.marcotancredo.bookstoremanager.model.publishers.dto.PublisherDTO;
 import br.com.marcotancredo.bookstoremanager.model.publishers.entity.Publisher;
 import br.com.marcotancredo.bookstoremanager.model.publishers.exception.PublisherAlreadyExistsException;
+import br.com.marcotancredo.bookstoremanager.model.publishers.exception.PublisherNotFoundException;
 import br.com.marcotancredo.bookstoremanager.model.publishers.mapper.PublisherMapper;
 import br.com.marcotancredo.bookstoremanager.model.publishers.repository.PublisherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,11 @@ public class PublisherService {
         if(duplicatedPublisher.isPresent()){
             throw new PublisherAlreadyExistsException(name, code);
         }
+    }
+
+    public PublisherDTO findById(Long id){
+        return publisherRepository.findById(id)
+                .map(publisherMapper::toDTO)
+                .orElseThrow(() -> new PublisherNotFoundException(id));
     }
 }

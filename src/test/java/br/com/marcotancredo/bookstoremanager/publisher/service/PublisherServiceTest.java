@@ -3,10 +3,12 @@ package br.com.marcotancredo.bookstoremanager.publisher.service;
 import br.com.marcotancredo.bookstoremanager.model.publishers.dto.PublisherDTO;
 import br.com.marcotancredo.bookstoremanager.model.publishers.entity.Publisher;
 import br.com.marcotancredo.bookstoremanager.model.publishers.exception.PublisherAlreadyExistsException;
+import br.com.marcotancredo.bookstoremanager.model.publishers.exception.PublisherNotFoundException;
 import br.com.marcotancredo.bookstoremanager.model.publishers.mapper.PublisherMapper;
 import br.com.marcotancredo.bookstoremanager.model.publishers.repository.PublisherRepository;
 import br.com.marcotancredo.bookstoremanager.model.publishers.service.PublisherService;
 import br.com.marcotancredo.bookstoremanager.publisher.builder.PublisherDTOBuilder;
+import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,5 +65,31 @@ public class PublisherServiceTest {
                 .thenReturn(Optional.of(expectedPublisherDuplicated));
 
         assertThrows(PublisherAlreadyExistsException.class, () -> publisherService.create(expectedPublisherToCreateDTO));
+    }
+
+    @Test
+    void whenValidIdIsGivenThenAPublisherShouldBeReturned(){
+        PublisherDTO expectedPublisherFoundDTO = publisherDTOBuilder.buildPublisherDTO();
+        Publisher expectedPublisherFound = publisherMapper.toModel(expectedPublisherFoundDTO);
+        var expectedPublisherFoundDTOId = expectedPublisherFoundDTO.getId();
+
+        when(publisherRepository.findById(expectedPublisherFoundDTOId)).thenReturn(Optional.of(expectedPublisherFound));
+
+        PublisherDTO foundPublisherDTO = publisherService.findById(expectedPublisherFoundDTOId);
+
+        assertThat(foundPublisherDTO, is(equalTo(foundPublisherDTO)));
+
+    }
+
+    @Test
+    void whenInvalidIdIsGivenThenAnExceptionShouldBeThrown(){
+        PublisherDTO expectedPublisherFoundDTO = publisherDTOBuilder.buildPublisherDTO();
+
+        var expectedPublisherFoundDTOId = expectedPublisherFoundDTO.getId();
+
+        when(publisherRepository.findById(expectedPublisherFoundDTOId)).thenReturn(Optional.empty());
+
+        assertThrows(PublisherNotFoundException.class, () -> publisherService.findById(expectedPublisherFoundDTOId));
+
     }
 }
