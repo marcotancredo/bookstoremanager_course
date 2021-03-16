@@ -10,7 +10,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/publishers")
-public class PublisherController {
+public class PublisherController implements PublisherControllerDocs{
 
     private PublisherService publisherService;
 
@@ -23,5 +23,10 @@ public class PublisherController {
     @ResponseStatus(HttpStatus.CREATED)
     public PublisherDTO create(@RequestBody @Valid PublisherDTO publisherDTO) {
         return publisherService.create(publisherDTO);
+    }
+
+    @GetMapping("/{id}")
+    public PublisherDTO findById(@PathVariable Long id) {
+        return publisherService.findById(id);
     }
 }

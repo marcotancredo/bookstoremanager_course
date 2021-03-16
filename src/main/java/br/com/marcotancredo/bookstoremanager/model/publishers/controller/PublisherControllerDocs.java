@@ -1,13 +1,10 @@
 package br.com.marcotancredo.bookstoremanager.model.publishers.controller;
 
-import br.com.marcotancredo.bookstoremanager.model.authors.dto.AuthorDTO;
 import br.com.marcotancredo.bookstoremanager.model.publishers.dto.PublisherDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-
-import java.util.List;
 
 @Api("Publishers management")
 public interface PublisherControllerDocs {
@@ -19,14 +16,14 @@ public interface PublisherControllerDocs {
     })
     PublisherDTO create(PublisherDTO publisherDTO);
 
-    /* @ApiOperation(value = "Find author by id operation")
+    @ApiOperation(value = "Find publisher by id operation")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success author found"),
-            @ApiResponse(code = 404, message = "Author not found error code!")
+            @ApiResponse(code = 200, message = "Success publisher found"),
+            @ApiResponse(code = 404, message = "Publisher not found error!")
     })
-    AuthorDTO findById(Long id);
+    PublisherDTO findById(Long id);
 
-    @ApiOperation(value = "List all registered authors")
+    /*@ApiOperation(value = "List all registered authors")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Return all registered authors")
     })
