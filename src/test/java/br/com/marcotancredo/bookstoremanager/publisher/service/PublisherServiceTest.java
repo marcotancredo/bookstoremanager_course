@@ -16,6 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -91,5 +93,27 @@ public class PublisherServiceTest {
 
         assertThrows(PublisherNotFoundException.class, () -> publisherService.findById(expectedPublisherFoundDTOId));
 
+    }
+
+    @Test
+    void whenListPublisherIsCalledThenItShouldBeReturned() {
+        PublisherDTO expectedPublisherFoundDTO = publisherDTOBuilder.buildPublisherDTO();
+        Publisher expectedPublisherFound = publisherMapper.toModel(expectedPublisherFoundDTO);
+
+        when(publisherRepository.findAll()).thenReturn(Collections.singletonList(expectedPublisherFound));
+
+        List<PublisherDTO> foundPublishersDTO = publisherService.findAll();
+
+        assertThat(foundPublishersDTO.size(), is(1));
+        assertThat(foundPublishersDTO.get(0), is(equalTo(expectedPublisherFoundDTO)));
+    }
+
+    @Test
+    void whenListPublisherIsCalledThenAnEmptyListShouldBeReturned() {
+        when(publisherRepository.findAll()).thenReturn(Collections.emptyList());
+
+        List<PublisherDTO> foundPublishersDTO = publisherService.findAll();
+
+        assertThat(foundPublishersDTO.size(), is(0));
     }
 }

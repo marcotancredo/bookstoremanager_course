@@ -4,11 +4,9 @@ import br.com.marcotancredo.bookstoremanager.model.publishers.controller.Publish
 import br.com.marcotancredo.bookstoremanager.model.publishers.dto.PublisherDTO;
 import br.com.marcotancredo.bookstoremanager.model.publishers.service.PublisherService;
 import br.com.marcotancredo.bookstoremanager.publisher.builder.PublisherDTOBuilder;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mapstruct.Mapper;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,8 +16,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import java.util.Collections;
+
 import static br.com.marcotancredo.bookstoremanager.utils.JsonConversionUtils.asJsonString;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -90,5 +90,19 @@ public class PublisherControllerTest {
                 .andExpect(jsonPath("$.id", is(expectedCreatedPublisherDTOId.intValue())))
                 .andExpect(jsonPath("$.name", is(expectedCreatedPublisherDTO.getName())))
                 .andExpect(jsonPath("$.code", is(expectedCreatedPublisherDTO.getCode())));
+    }
+
+    @Test
+    void whenGETListIsCalledThenOkStatusShouldBeInformed() throws Exception {
+        PublisherDTO expectedCreatedPublisherDTO = publisherDTOBuilder.buildPublisherDTO();
+
+        when(publisherService.findAll()).thenReturn(Collections.singletonList(expectedCreatedPublisherDTO));
+
+        mockMvc.perform(get(PUBLISHERS_API_URL_PATH)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", is(expectedCreatedPublisherDTO.getId().intValue())))
+                .andExpect(jsonPath("$[0].name", is(expectedCreatedPublisherDTO.getName())))
+                .andExpect(jsonPath("$[0].code", is(expectedCreatedPublisherDTO.getCode())));
     }
 }
