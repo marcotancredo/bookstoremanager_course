@@ -4,6 +4,7 @@ import br.com.marcotancredo.bookstoremanager.model.publishers.controller.Publish
 import br.com.marcotancredo.bookstoremanager.model.publishers.dto.PublisherDTO;
 import br.com.marcotancredo.bookstoremanager.model.publishers.service.PublisherService;
 import br.com.marcotancredo.bookstoremanager.publisher.builder.PublisherDTOBuilder;
+import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,9 +21,9 @@ import java.util.Collections;
 
 import static br.com.marcotancredo.bookstoremanager.utils.JsonConversionUtils.asJsonString;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -104,5 +105,17 @@ public class PublisherControllerTest {
                 .andExpect(jsonPath("$[0].id", is(expectedCreatedPublisherDTO.getId().intValue())))
                 .andExpect(jsonPath("$[0].name", is(expectedCreatedPublisherDTO.getName())))
                 .andExpect(jsonPath("$[0].code", is(expectedCreatedPublisherDTO.getCode())));
+    }
+
+    @Test
+    void whenDELETEIsCalledThenNoContentStatusShouldBeInformed() throws Exception {
+        PublisherDTO expectedCreatedPublisherDTO = publisherDTOBuilder.buildPublisherDTO();
+        var expectedPublisherIDToDelete = expectedCreatedPublisherDTO.getId();
+
+        doNothing().when(publisherService).delete(expectedPublisherIDToDelete);
+
+        mockMvc.perform(delete(PUBLISHERS_API_URL_PATH + "/" + expectedPublisherIDToDelete)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
     }
 }

@@ -5,6 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -31,11 +32,11 @@ public interface PublisherControllerDocs {
     })
     List<PublisherDTO> findAll();
 
-    /*
-    @ApiOperation(value = "Delete author by id operation")
+
+    @ApiOperation(value = "Delete publisher by id operation")
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Success author deleted"),
-            @ApiResponse(code = 404, message = "Author not found error code!")
+            @ApiResponse(code = 204, message = "Success publisher deleted"),
+            @ApiResponse(code = 404, message = "Publisher not found error code!")
     })
-    void delete(Long id); */
+    void delete(Long id);
 }
