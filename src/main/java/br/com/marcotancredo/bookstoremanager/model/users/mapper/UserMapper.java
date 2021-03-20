@@ -12,5 +12,5 @@ public interface UserMapper {
 
     User toModel(UserDTO userDTO);
 
-    UserDTO toDTO(User user);
+    UserDTO toDTO (User user);
 }

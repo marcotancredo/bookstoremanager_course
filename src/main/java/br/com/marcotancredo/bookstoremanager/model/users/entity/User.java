@@ -31,13 +31,13 @@ public class User extends Auditable {
     private String email;
 
     @Column(nullable = false, unique = true)
-    private String userName;
+    private String username;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false, columnDefinition = "TIMESTAMP")
-    private LocalDate birthDate;
+    private LocalDate birthdate;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Book> books;

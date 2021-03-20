@@ -38,7 +38,7 @@ public class UserDTO {
 
     @NotNull
     @NotEmpty
-    private String userName;
+    private String username;
 
     @NotNull
     @NotEmpty
@@ -46,5 +46,5 @@ public class UserDTO {
 
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate birthDate;
+    private LocalDate birthdate;
 }
