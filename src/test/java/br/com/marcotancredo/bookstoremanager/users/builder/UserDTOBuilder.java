@@ -25,13 +25,13 @@ public class UserDTOBuilder {
     private String email = "marcotancredo@gmail.com";
 
     @Builder.Default
-    private String userName = "marcotancredo";
+    private String username = "marcotancredo";
 
     @Builder.Default
     private String password = "123456";
 
     @Builder.Default
-    private LocalDate birthDate = LocalDate.of(1988, 1, 30);
+    private LocalDate birthdate = LocalDate.of(1988, 1, 30);
 
     public UserDTO builderUserDTO(){
         return new UserDTO(
@@ -40,9 +40,9 @@ public class UserDTOBuilder {
                 age,
                 gender,
                 email,
-                userName,
+                username,
                 password,
-                birthDate
+                birthdate
         );
     }
 }
