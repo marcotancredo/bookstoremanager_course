@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static br.com.marcotancredo.bookstoremanager.model.users.utils.MessageDTOUtils.creationMessage;
+import static br.com.marcotancredo.bookstoremanager.model.users.utils.MessageDTOUtils.updatedMessage;
+
 @Service
 public class UserService {
 
@@ -34,19 +37,21 @@ public class UserService {
     }
 
     public void delete(Long id){
-        verifyIfExists(id);
+        verifyAndGetIfExists(id);
         userRepository.deleteById(id);
     }
 
-    private MessageDTO creationMessage(User createdUser) {
-        String createdUserName = createdUser.getUsername();
-        Long createdUserId = createdUser.getId();
+    public MessageDTO update(Long id, UserDTO userToUpdateDTO){
+        User foundUser = verifyAndGetIfExists(id);
+        userToUpdateDTO.setId(foundUser.getId());
 
-        String createdUserMessage = String.format("User %s with ID %s successfully created!", createdUserName, createdUserId);
+        User userToUpdate = userMapper.toModel(userToUpdateDTO);
+        userToUpdate.setCreatedDate(foundUser.getCreatedDate());
 
-        return MessageDTO.builder()
-                .message(createdUserMessage)
-                .build();
+        User updatedUser = userRepository.save(userToUpdate);
+
+        return updatedMessage(updatedUser);
+
     }
 
     private void verifyIfExists(String email, String username) {
@@ -55,8 +60,8 @@ public class UserService {
             throw new UserAlreadyExistsException(email, username);
         }
     }
-    private void verifyIfExists(Long id) {
-        userRepository.findById(id)
+    private User verifyAndGetIfExists(Long id) {
+        return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 }
