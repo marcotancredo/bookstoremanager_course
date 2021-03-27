@@ -5,10 +5,12 @@ import br.com.marcotancredo.bookstoremanager.model.users.dto.MessageDTO;
 import br.com.marcotancredo.bookstoremanager.model.users.dto.UserDTO;
 import br.com.marcotancredo.bookstoremanager.model.users.entity.User;
 import br.com.marcotancredo.bookstoremanager.model.users.exception.UserAlreadyExistsException;
+import br.com.marcotancredo.bookstoremanager.model.users.exception.UserNotFoundException;
 import br.com.marcotancredo.bookstoremanager.model.users.mapper.UserMapper;
 import br.com.marcotancredo.bookstoremanager.model.users.repository.UserRepository;
 import br.com.marcotancredo.bookstoremanager.model.users.service.UserService;
 import br.com.marcotancredo.bookstoremanager.users.builder.UserDTOBuilder;
+import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +24,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -62,7 +64,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void whenExistinUsderIsInformedThenAnExceptionShouldBeThrown() {
+    void whenExistingUserIsInformedThenAnExceptionShouldBeThrown() {
         UserDTO expectedDuplicatedUserDTO = userDTOBuilder.builderUserDTO();
         User expectedDuplicatedUser = userMapper.toModel(expectedDuplicatedUserDTO);
 
@@ -76,5 +78,28 @@ public class UserServiceTest {
 
         assertThrows(UserAlreadyExistsException.class, () -> userService.create(expectedDuplicatedUserDTO));
 
+    }
+
+    @Test
+    void whenValidUserIsInformedThenItShouldBeDeleted() {
+        UserDTO expectedDeletedUserDTO = userDTOBuilder.builderUserDTO();
+        User expectedDeletedUser = userMapper.toModel(expectedDeletedUserDTO);
+        var expectedDeletedUserId = expectedDeletedUserDTO.getId();
+
+        when(userRepository.findById(expectedDeletedUserId)).thenReturn(Optional.of(expectedDeletedUser));
+        doNothing().when(userRepository).deleteById(expectedDeletedUserId);
+
+        userService.delete(expectedDeletedUserId);
+
+        verify(userRepository, times(1)).deleteById(expectedDeletedUserId);
+    }
+    @Test
+    void whenInvalidUserIsInformedThenAnExceptionShouldBeThrown() {
+        UserDTO expectedDeletedUserDTO = userDTOBuilder.builderUserDTO();
+        var expectedDeletedUserId = expectedDeletedUserDTO.getId();
+
+        when(userRepository.findById(expectedDeletedUserId)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> userService.delete(expectedDeletedUserId));
     }
 }

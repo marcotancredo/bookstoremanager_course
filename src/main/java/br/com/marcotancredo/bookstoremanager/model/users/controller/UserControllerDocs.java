@@ -17,6 +17,13 @@ public interface UserControllerDocs {
     })
     MessageDTO create(UserDTO userToCreateDTO);
 
+    @ApiOperation(value = "User publisher by id operation")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Success user deleted"),
+            @ApiResponse(code = 404, message = "User not found error!")
+    })
+    void delete(Long id);
+
     /* @ApiOperation(value = "Find publisher by id operation")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success publisher found"),
@@ -28,13 +35,5 @@ public interface UserControllerDocs {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Return all registered publishers")
     })
-    List<PublisherDTO> findAll();
-
-
-    @ApiOperation(value = "Delete publisher by id operation")
-    @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Success publisher deleted"),
-            @ApiResponse(code = 404, message = "Publisher not found error code!")
-    })
-    void delete(Long id); */
+    List<PublisherDTO> findAll(); */
 }
