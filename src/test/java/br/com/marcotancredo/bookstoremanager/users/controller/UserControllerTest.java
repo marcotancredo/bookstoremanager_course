@@ -5,6 +5,7 @@ import br.com.marcotancredo.bookstoremanager.model.users.dto.MessageDTO;
 import br.com.marcotancredo.bookstoremanager.model.users.dto.UserDTO;
 import br.com.marcotancredo.bookstoremanager.model.users.service.UserService;
 import br.com.marcotancredo.bookstoremanager.users.builder.UserDTOBuilder;
+import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,8 +22,7 @@ import static br.com.marcotancredo.bookstoremanager.utils.JsonConversionUtils.as
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -88,5 +88,23 @@ public class UserControllerTest {
         mockMvc.perform(delete(USER_API_URL_PATH + "/" + expectedUserToCreateDTO.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void whenPUTIsCalledThenOkStatusShouldBeReturned() throws Exception {
+
+        UserDTO expectedUserToUpdatedDTO = userDTOBuilder.builderUserDTO();
+        expectedUserToUpdatedDTO.setUsername("marcotancredoUpdated");
+        String expectedUpdatedMessage = "User marcotancredoUpdated with ID 1 successfully updated";
+        MessageDTO expectedUpdateMessageDTO = MessageDTO.builder().message(expectedUpdatedMessage).build();
+        var expectedUserToUpdateId = expectedUserToUpdatedDTO.getId();
+
+        when(userService.update(expectedUserToUpdateId, expectedUserToUpdatedDTO)).thenReturn(expectedUpdateMessageDTO);
+
+        mockMvc.perform(put(USER_API_URL_PATH + "/" + expectedUserToUpdateId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(expectedUserToUpdatedDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message", is(expectedUpdatedMessage)));
     }
 }

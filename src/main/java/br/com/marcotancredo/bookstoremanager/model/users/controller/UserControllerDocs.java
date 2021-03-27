@@ -6,6 +6,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
 
 @Api("System users management")
 public interface UserControllerDocs {
@@ -24,16 +28,10 @@ public interface UserControllerDocs {
     })
     void delete(Long id);
 
-    /* @ApiOperation(value = "Find publisher by id operation")
+    @ApiOperation(value = "User update operation")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success publisher found"),
-            @ApiResponse(code = 404, message = "Publisher not found error!")
+            @ApiResponse(code = 200, message = "Success user updated"),
+            @ApiResponse(code = 400, message = "Missing required fields, wrong filed value or user already registered!")
     })
-    PublisherDTO findById(Long id);
-
-    @ApiOperation(value = "List all registered publishers")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Return all registered publishers")
-    })
-    List<PublisherDTO> findAll(); */
+    MessageDTO update(Long id, UserDTO userToUpdateDTO);
 }
