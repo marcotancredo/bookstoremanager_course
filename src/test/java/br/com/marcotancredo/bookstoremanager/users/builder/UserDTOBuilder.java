@@ -2,6 +2,7 @@ package br.com.marcotancredo.bookstoremanager.users.builder;
 
 import br.com.marcotancredo.bookstoremanager.model.users.dto.UserDTO;
 import br.com.marcotancredo.bookstoremanager.model.users.enums.Gender;
+import br.com.marcotancredo.bookstoremanager.model.users.enums.Role;
 import lombok.Builder;
 
 import java.time.LocalDate;
@@ -33,6 +34,9 @@ public class UserDTOBuilder {
     @Builder.Default
     private LocalDate birthdate = LocalDate.of(1988, 1, 30);
 
+    @Builder.Default
+    private Role role = Role.USER;
+
     public UserDTO builderUserDTO(){
         return new UserDTO(
                 id,
@@ -42,7 +46,8 @@ public class UserDTOBuilder {
                 email,
                 username,
                 password,
-                birthdate
+                birthdate,
+                role
         );
     }
 }

@@ -1,6 +1,7 @@
 package br.com.marcotancredo.bookstoremanager.model.users.dto;
 
 import br.com.marcotancredo.bookstoremanager.model.users.enums.Gender;
+import br.com.marcotancredo.bookstoremanager.model.users.enums.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -47,4 +48,7 @@ public class UserDTO {
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate birthdate;
+
+    @NotNull
+    private Role role;
 }
