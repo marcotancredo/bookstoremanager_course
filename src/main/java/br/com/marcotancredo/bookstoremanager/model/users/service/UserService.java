@@ -8,6 +8,7 @@ import br.com.marcotancredo.bookstoremanager.model.users.exception.UserNotFoundE
 import br.com.marcotancredo.bookstoremanager.model.users.mapper.UserMapper;
 import br.com.marcotancredo.bookstoremanager.model.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,16 +23,20 @@ public class UserService {
 
     private UserRepository userRepository;
 
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public MessageDTO create(UserDTO userToCreateDTO){
         verifyIfExists(userToCreateDTO.getEmail(), userToCreateDTO.getUsername());
         User userToCreate = userMapper.toModel(userToCreateDTO);
-        User createdUser = userRepository.save(userToCreate);
+        userToCreate.setPassword(passwordEncoder.encode(userToCreate.getPassword()));
 
+        User createdUser = userRepository.save(userToCreate);
         return creationMessage(createdUser);
 
     }
@@ -44,8 +49,8 @@ public class UserService {
     public MessageDTO update(Long id, UserDTO userToUpdateDTO){
         User foundUser = verifyAndGetIfExists(id);
         userToUpdateDTO.setId(foundUser.getId());
-
         User userToUpdate = userMapper.toModel(userToUpdateDTO);
+        userToUpdate.setPassword(passwordEncoder.encode(userToUpdate.getPassword()));
         userToUpdate.setCreatedDate(foundUser.getCreatedDate());
 
         User updatedUser = userRepository.save(userToUpdate);
