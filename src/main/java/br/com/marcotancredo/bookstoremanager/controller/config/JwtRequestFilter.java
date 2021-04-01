@@ -37,7 +37,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             jwtToken = requestTokenHeader.substring(7);
             username = jwtTokenManager.getUsernameFromToken(jwtToken);
         } else {
-            logger.warn("JWT Token does not begi with Bearer String");
+            logger.warn("JWT Token does not begin with Bearer String");
         }
 
         if (isUsernameInContext(username)){
@@ -48,11 +48,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     }
 
     private boolean isTokenPresent(String requestTokenHeader) {
-        return requestTokenHeader != null & requestTokenHeader.startsWith("Bearer ");
+        return requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ");
     }
 
     private boolean isUsernameInContext(String username) {
-        return username != null && SecurityContextHolder.getContext().getAuthentication() == null;
+        return !username.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null;
     }
 
     private void addUsernameInContext(HttpServletRequest request, String username, String jwtToken) {
