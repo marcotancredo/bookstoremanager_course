@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -48,6 +49,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private PasswordEncoder passwordEncoder;
 
+    private JwtRequestFilter jwtRequestFilter;
+
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
@@ -62,14 +65,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
-                .authorizeRequests().antMatchers(USERS_API_URL, H2_CONSOLE_URL, SWAGGER_URL).permitAll()
+                .authorizeRequests()
+                .antMatchers(USERS_API_URL, H2_CONSOLE_URL, SWAGGER_URL).permitAll()
                 .antMatchers(PUBLISHERS_API_URL, AUTHORS_API_URL).hasAnyRole(ROLE_ADMIN)
                 .antMatchers(BOOKS_API_URL).hasAnyRole(ROLE_ADMIN, ROLE_USER)
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         httpSecurity.headers().frameOptions().disable();
     }
