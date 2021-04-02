@@ -8,8 +8,6 @@ import br.com.marcotancredo.bookstoremanager.model.users.service.AuthenticationS
 import br.com.marcotancredo.bookstoremanager.model.users.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

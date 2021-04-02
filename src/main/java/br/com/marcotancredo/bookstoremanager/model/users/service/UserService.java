@@ -69,4 +69,9 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
+
+    public User verifyAndGetIfExists(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
+    }
 }

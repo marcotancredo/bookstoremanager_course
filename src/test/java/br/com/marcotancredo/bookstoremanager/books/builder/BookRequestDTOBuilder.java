@@ -24,10 +24,10 @@ public class BookRequestDTOBuilder {
     private final Integer chapters = 10;
 
     @Builder.Default
-    private final Long authorId = 3L;
+    private final Long authorId = 1L;
 
     @Builder.Default
-    private final Long publisherId = 2L;
+    private final Long publisherId = 1L;
 
     private final UserDTO userDTO = UserDTOBuilder.builder().build().builderUserDTO();
 

@@ -13,7 +13,7 @@ public interface BookMapper {
 
     Book toModel(BookRequestDTO bookRequestDTO);
 
-    Book toModel(BookResponseDTO bookResponseDTO);
+    Book toModel(BookResponseDTO bookRequestDTO);
 
     BookResponseDTO toDTO(Book book);
 }

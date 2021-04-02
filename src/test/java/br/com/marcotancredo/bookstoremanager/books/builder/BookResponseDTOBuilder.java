@@ -28,10 +28,10 @@ public class BookResponseDTOBuilder {
     private final Integer chapters = 10;
 
     @Builder.Default
-    private final PublisherDTO publisherDTO = PublisherDTOBuilder.builder().build().buildPublisherDTO();
+    private final AuthorDTO author = AuthorDTOBuilder.builder().build().buildAuthorDTO();
 
     @Builder.Default
-    private final AuthorDTO authorDTO = AuthorDTOBuilder.builder().build().buildAuthorDTO();
+    private final PublisherDTO publisher = PublisherDTOBuilder.builder().build().buildPublisherDTO();
 
     private final UserDTO userDTO = UserDTOBuilder.builder().build().builderUserDTO();
 
@@ -42,8 +42,8 @@ public class BookResponseDTOBuilder {
                 isbn,
                 pages,
                 chapters,
-                publisherDTO,
-                authorDTO
+                author,
+                publisher
         );
     }
 }

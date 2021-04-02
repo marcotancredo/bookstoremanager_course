@@ -21,7 +21,7 @@ public class BookResponseDTO {
 
     private Integer chapters;
 
-    private PublisherDTO publisherId;
-
     private AuthorDTO author;
+
+    private PublisherDTO publisher;
 }
