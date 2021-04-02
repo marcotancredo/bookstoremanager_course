@@ -16,8 +16,6 @@ import br.com.marcotancredo.bookstoremanager.model.publishers.service.PublisherS
 import br.com.marcotancredo.bookstoremanager.model.users.dto.AuthenticatedUser;
 import br.com.marcotancredo.bookstoremanager.model.users.entity.User;
 import br.com.marcotancredo.bookstoremanager.model.users.service.UserService;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
