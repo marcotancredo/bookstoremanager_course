@@ -1,4 +1,4 @@
-package br.com.marcotancredo.bookstoremanager.controller.config;
+package br.com.marcotancredo.bookstoremanager.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

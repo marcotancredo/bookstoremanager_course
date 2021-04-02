@@ -1,4 +1,4 @@
-package br.com.marcotancredo.bookstoremanager.controller.config;
+package br.com.marcotancredo.bookstoremanager.config;
 
 import br.com.marcotancredo.bookstoremanager.model.users.service.AuthenticationService;
 import br.com.marcotancredo.bookstoremanager.model.users.service.JwtTokenManager;
