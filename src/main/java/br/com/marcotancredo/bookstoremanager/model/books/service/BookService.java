@@ -6,6 +6,7 @@ import br.com.marcotancredo.bookstoremanager.model.books.dto.BookRequestDTO;
 import br.com.marcotancredo.bookstoremanager.model.books.dto.BookResponseDTO;
 import br.com.marcotancredo.bookstoremanager.model.books.entity.Book;
 import br.com.marcotancredo.bookstoremanager.model.books.exception.BookAlreadyExistsException;
+import br.com.marcotancredo.bookstoremanager.model.books.exception.BookNotFoundException;
 import br.com.marcotancredo.bookstoremanager.model.books.mapper.BookMapper;
 import br.com.marcotancredo.bookstoremanager.model.books.repository.BookRepository;
 import br.com.marcotancredo.bookstoremanager.model.publishers.entity.Publisher;
@@ -46,6 +47,13 @@ public class BookService {
         Book savedBook = bookRepository.save(bookToSave);
 
         return bookMapper.toDTO(savedBook);
+    }
+
+    public BookResponseDTO findByIdAndUser(AuthenticatedUser authenticatedUser, Long bookId){
+        User foundAuthenticatedUser = userService.verifyAndGetIfExists(authenticatedUser.getUsername());
+        return bookRepository.findByIdAndUser(bookId, foundAuthenticatedUser)
+                .map(bookMapper::toDTO)
+                .orElseThrow(() -> new BookNotFoundException(bookId));
     }
 
     private void verifyIfBookIsAlreadyRegistered(BookRequestDTO bookRequestDTO, User foundUser) {

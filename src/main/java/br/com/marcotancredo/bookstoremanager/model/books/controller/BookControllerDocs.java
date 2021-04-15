@@ -7,8 +7,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PathVariable;
 
-@Api("Books management")
+@Api("Books module management")
 public interface BookControllerDocs {
 
     @ApiOperation(value = "Book creation operation")
@@ -18,13 +20,16 @@ public interface BookControllerDocs {
     })
     BookResponseDTO create(AuthenticatedUser authenticatedUser, BookRequestDTO bookRequestDTO);
 
-    /*@ApiOperation(value = "Find author by id operation")
+    @ApiOperation(value = "Find book by id operation")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success author found"),
-            @ApiResponse(code = 404, message = "Author not found error code!")
+            @ApiResponse(code = 200, message = "Success book found"),
+            @ApiResponse(code = 404, message = "Book not found error code!")
     })
-    AuthorDTO findById(Long id);
+    BookResponseDTO findByIdAndUser(
+            AuthenticatedUser authenticatedUser,
+            Long bookId);
 
+    /*
     @ApiOperation(value = "List all registered authors")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Return all registered authors")
