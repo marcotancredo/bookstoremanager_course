@@ -13,7 +13,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/books")
-public class BookController {
+public class BookController implements BookControllerDocs {
 
     private BookService bookService;
 
@@ -28,5 +28,12 @@ public class BookController {
             @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
             @RequestBody @Valid BookRequestDTO bookRequestDTO) {
         return bookService.create(authenticatedUser, bookRequestDTO);
+    }
+
+    @GetMapping("/{bookId}")
+    public BookResponseDTO findByIdAndUser(
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            @PathVariable Long bookId) {
+        return bookService.findByIdAndUser(authenticatedUser, bookId);
     }
 }

@@ -25,7 +25,9 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,9 +72,9 @@ public class BookControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(expectedBookToCreateDTO)))
                 .andExpect(status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", is(expectedCreatedBookDTO.getId().intValue())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name", is(expectedCreatedBookDTO.getName())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.isbn", is(expectedCreatedBookDTO.getIsbn())));
+                .andExpect(jsonPath("$.id", is(expectedCreatedBookDTO.getId().intValue())))
+                .andExpect(jsonPath("$.name", is(expectedCreatedBookDTO.getName())))
+                .andExpect(jsonPath("$.isbn", is(expectedCreatedBookDTO.getIsbn())));
     }
 
     @Test
@@ -85,5 +87,22 @@ public class BookControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(expectedBookToCreateDTO)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void whenGETIsCalledWithValidBookIdThenStatusOkShouldBeInformed() throws Exception {
+
+        BookRequestDTO expectedBookToFindDTO = bookRequestDTOBuilder.buildBookRequestDTO();
+        BookResponseDTO expectedFoundBookDTO = bookResponseDTOBuilder.buildBookResponseDTO();
+
+        when(bookService.findByIdAndUser(any(AuthenticatedUser.class), eq(expectedBookToFindDTO.getId()))).thenReturn(expectedFoundBookDTO);
+
+        mockMvc.perform(get(BOOKS_API_URL_PATH + "/" + expectedBookToFindDTO.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(expectedBookToFindDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(expectedFoundBookDTO.getId().intValue())))
+                .andExpect(jsonPath("$.name", is(expectedFoundBookDTO.getName())))
+                .andExpect(jsonPath("$.isbn", is(expectedFoundBookDTO.getIsbn())));
     }
 }
