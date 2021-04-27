@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
+
 @Api("Books module management")
 public interface BookControllerDocs {
 
@@ -29,13 +31,13 @@ public interface BookControllerDocs {
             AuthenticatedUser authenticatedUser,
             Long bookId);
 
-    /*
-    @ApiOperation(value = "List all registered authors")
+    @ApiOperation(value = "List all registered books")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Return all registered authors")
+            @ApiResponse(code = 200, message = "Return all registered books")
     })
-    List<AuthorDTO> findAll();
+    List<BookResponseDTO> findAllByUser(AuthenticatedUser authenticatedUser);
 
+    /*
     @ApiOperation(value = "Delete author by id operation")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Success author deleted"),
