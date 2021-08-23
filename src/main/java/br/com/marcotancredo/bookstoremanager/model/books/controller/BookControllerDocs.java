@@ -37,11 +37,11 @@ public interface BookControllerDocs {
     })
     List<BookResponseDTO> findAllByUser(AuthenticatedUser authenticatedUser);
 
-    /*
-    @ApiOperation(value = "Delete author by id operation")
+
+    @ApiOperation(value = "Delete book by id and user operation")
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Success author deleted"),
-            @ApiResponse(code = 404, message = "Author not found error code!")
+            @ApiResponse(code = 204, message = "Success book deleted"),
+            @ApiResponse(code = 404, message = "Book not found error code!")
     })
-    void delete(Long id); */
+    void deleteByIdAndUser(AuthenticatedUser authenticatedUser, Long bookId);
 }
