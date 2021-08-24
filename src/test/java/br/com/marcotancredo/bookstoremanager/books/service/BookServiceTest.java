@@ -184,4 +184,43 @@ public class BookServiceTest {
         assertThrows(BookNotFoundException.class,
                 () -> bookService.deleteByIdAndUser(authenticatedUser, expectedBookToDeleteDTO.getId()));
     }
+
+    @Test
+    void whenExistingBookIdIsInformedThenItShouldBeUpdated() {
+        BookRequestDTO expectedBookToUpdateDTO = bookRequestDTOBuilder.buildBookRequestDTO();
+        BookResponseDTO expectedUpdatedBookDTO = bookResponseDTOBuilder.buildBookResponseDTO();
+        Book expectedUpdatedBook = bookMapper.toModel(expectedUpdatedBookDTO);
+
+        when(userService.verifyAndGetIfExists(authenticatedUser.getUsername())).thenReturn(new User());
+        when(bookRepository.findByIdAndUser(
+                eq(expectedBookToUpdateDTO.getId()),
+                any(User.class))).thenReturn(Optional.of(expectedUpdatedBook));
+
+        when(authorService.verifyAndGetIfExists(expectedBookToUpdateDTO.getAuthorId())).thenReturn(new Author());
+        when(publisherService.verifyAndGetIfExists(expectedBookToUpdateDTO.getPublisherId())).thenReturn(new Publisher());
+        when(bookRepository.save(any(Book.class))).thenReturn(expectedUpdatedBook);
+
+        BookResponseDTO updatedBookResponserDTO = bookService.updateByIdAndUser(
+                authenticatedUser,
+                expectedBookToUpdateDTO.getId(),
+                expectedBookToUpdateDTO);
+
+        assertThat(updatedBookResponserDTO, is(equalTo(expectedUpdatedBookDTO)));
+    }
+
+    @Test
+    void whenNotExistingBookIdIsInformedThenAnExceptionShouldBeThrown() {
+        BookRequestDTO expectedBookToUpdateDTO = bookRequestDTOBuilder.buildBookRequestDTO();
+        BookResponseDTO expectedUpdatedBookDTO = bookResponseDTOBuilder.buildBookResponseDTO();
+
+        when(userService.verifyAndGetIfExists(authenticatedUser.getUsername())).thenReturn(new User());
+        when(bookRepository.findByIdAndUser(
+                eq(expectedBookToUpdateDTO.getId()),
+                any(User.class))).thenReturn(Optional.empty());
+
+        assertThrows(BookNotFoundException.class, () -> bookService.updateByIdAndUser(
+                authenticatedUser,
+                expectedBookToUpdateDTO.getId(),
+                expectedBookToUpdateDTO));
+    }
 }
