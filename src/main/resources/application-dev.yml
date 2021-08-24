@@ -23,3 +23,4 @@ logging:
 jwt:
   secret: bookstoremanager
   validity: 18000
+  #test
